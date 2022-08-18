@@ -1,4 +1,5 @@
 from math import ceil, floor
+from bisect import bisect_right
 import os
 
 
@@ -16,17 +17,13 @@ def get_valid_files():
 
 
 def print_intervals(start, end, interval, lst):
-    start_idx = 0
+    prev_end = 0
     while start < end:
-        count = 0
-        for i in range(start_idx, len(lst)):
-            num = lst[i]
-            if num <= start:
-                count += 1
-            else:
-                start_idx = i
-                break
-        print(f"{round(start, 2)}-{round(start+interval, 2)}:\t {count}")
+        hi = start + interval
+        idx = bisect_right(lst, hi, lo=prev_end)
+        count = idx - prev_end
+        print(f"{round(start, 2)}-{round(hi, 2)}:\t {count}")
+        prev_end = idx
         start += interval
 
 
